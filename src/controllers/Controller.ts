@@ -42,8 +42,7 @@ class Controller<IModel extends Document, MyService extends Service<IModel>> {
     async update(req: IReq, res: IRes): Promise<void> {
         try {
             const myService = this.service;
-            const id = req.user.sub;
-            const filter: object = { _id: id };
+            const filter: object = { _id: req.body.id };
             const result = await myService.update(filter, req.body);
             res.status(httpStatus.OK).send(result);
         } catch (err) {

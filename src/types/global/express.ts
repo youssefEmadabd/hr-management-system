@@ -8,7 +8,7 @@ interface UserInterface extends Express.User {
     exp?: number;
     azp?: string;
     scope?: string;
-    role?: string;
+    type?: string;
     headers?: any;
 }
 

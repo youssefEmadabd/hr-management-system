@@ -11,7 +11,8 @@ const envVarsSchema: Joi.AnySchema = Joi.object()
         NODE_ENV: Joi.string().valid('development', 'production').default('development'),
         MONGODB_URL: Joi.string().required(),
         JWT_SECRET: Joi.string().required(),
-        DOMAIN: Joi.string().required()
+        DOMAIN: Joi.string(),
+        JWT_REFRESH_TOKEN_SECRET: Joi.string().required()
     })
     .unknown()
 
@@ -27,6 +28,7 @@ export const config = {
     mongodbUrl: envVars.MONGODB_URL,
     jwt: {
         secret: envVars.JWT_SECRET,
+        refresh_secret: envVars.JWT_REFRESH_TOKEN_SECRET
     }, 
     domain: envVars.DOMAIN
 }

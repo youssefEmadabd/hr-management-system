@@ -1,0 +1,1 @@
+export {employeeService, EmployeeService} from './employee.service'
