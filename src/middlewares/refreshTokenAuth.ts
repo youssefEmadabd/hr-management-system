@@ -15,7 +15,7 @@ import ApiError from '../utils/ApiError';
  * @throws {ApiError}
  */
 function RefreshTokenAuth(req: RequestInterface, res: Response, next: NextFunction) {
-    const refreshHeader:string = req.headers.common['x-refresh-token'];
+    const refreshHeader:string = req.headers['x-refresh-token'];
     if (!refreshHeader)
         throw new ApiError(httpStatus.UNAUTHORIZED, 'Token not found');
     try {

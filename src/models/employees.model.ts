@@ -6,9 +6,12 @@ import { IEmployee, EmployeeType } from '../types';
 const EmployeeSchema: Schema = new Schema<IEmployee>({
     username: { type: String, required: true, index: true, unique: true },
     password: { type: String, required: true, index: true, unique: true },
-    employeeType: {type: String,enum:["normal", "human resource"], required:true},
-    attendance: [{type: String}],
-})
+    employeeType: { type: String, enum: ["normal", "human resource"], required: true },
+    attendance: [{ type: String }],
+
+},
+    { timestamps: true }
+)
 
 EmployeeSchema.plugin(mongooseLeanVirtuals);
 

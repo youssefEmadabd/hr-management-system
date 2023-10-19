@@ -27,7 +27,7 @@ class EmployeeController extends Controller<IEmployee, EmployeeService>{
         const token = await jwt.sign({ sub: employee._id, type: employee.employeeType, token_type: "access" }, config.jwt.secret, {
             expiresIn: '1h',
         });
-        const refreshToken = await jwt.sign({ sub: employee._id, type: employee.employeeType, token_type: "refresh" }, config.jwt.secret, {
+        const refreshToken = await jwt.sign({ sub: employee._id, type: employee.employeeType, token_type: "refresh" }, config.jwt.refresh_secret, {
             expiresIn: '6h',
         })
         res.status(httpStatus.ACCEPTED).send({
@@ -39,15 +39,15 @@ class EmployeeController extends Controller<IEmployee, EmployeeService>{
     async register(req: RequestInterface, res: Response) {
         const {username, password, type} = req.body
         const checkUsername = await this.service.isUsernameUnique(username);
-        if(checkUsername) throw new ApiError(httpStatus.BAD_REQUEST, "This username is already registered to the platform")
+        if(!checkUsername) throw new ApiError(httpStatus.BAD_REQUEST, "This username is already registered to the platform")
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-        const employee: IEmployee = await this.service.create({username, hashedPassword, type});
+        const employee: IEmployee = await this.service.create({username, password:hashedPassword, employeeType: type});
         if(!employee) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR,"An error occurred while creating your account")
         const token = await jwt.sign({ sub: employee._id, type: employee.employeeType, token_type: "access" }, config.jwt.secret, {
             expiresIn: '1h',
         });
-        const refreshToken = await jwt.sign({ sub: employee._id, type: employee.employeeType, token_type: "refresh" }, config.jwt.secret, {
+        const refreshToken = await jwt.sign({ sub: employee._id, type: employee.employeeType, token_type: "refresh" }, config.jwt.refresh_secret, {
             expiresIn: '6h',
         })
         res.status(httpStatus.ACCEPTED).send({
@@ -68,9 +68,10 @@ class EmployeeController extends Controller<IEmployee, EmployeeService>{
         try {
             const myService = this.service;
             const filter: object = { employeeType:EmployeeType.NORMAL };
-            const employees = await myService.get(filter);
+            const employees = await myService.getAll(filter);
+            console.log(employees)
             if (!employees) throw new ApiError(httpStatus.NOT_FOUND, 'could not find employees');
-            res.status(httpStatus.ACCEPTED).send({ ...employees });
+            res.status(httpStatus.ACCEPTED).send(employees);
         } catch (err) {
             throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, err.message);
         }

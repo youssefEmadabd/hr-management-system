@@ -42,6 +42,15 @@ export default class Service<IModel extends Document> {
             .lean({ virtuals: true });
         return document;
     }
+    async getAll(filter: FilterQuery<IModel>,
+        options: ServiceOptions = { sort: '', limit: 0, page: 0 }): Promise<IModel[]> {
+        const document: IModel[] = await this.model
+            .find(filter)
+            .populate(options.populate)
+            .select(options.select)
+            .lean({ virtuals: true });
+        return document
+    }
 
     async getAllWithPagination(
         filter: FilterQuery<IModel>,

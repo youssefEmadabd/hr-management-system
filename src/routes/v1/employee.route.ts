@@ -9,11 +9,12 @@ const router: Router = express.Router();
 
 router.route('/')
     .get(asyncHandler(auth), asyncHandler(employeeController.getAllNormalEmployees))
-    .patch(asyncHandler(auth), asyncHandler(employeeController.update))
+
+router.route('/:id').patch(asyncHandler(auth), asyncHandler(employeeController.update))
 
 router.post('/login', asyncHandler(employeeController.login));
 router.post('/register', asyncHandler(employeeController.register));
-router.post('/reset-token',asyncHandler(RefreshTokenAuth),asyncHandler(employeeController.generateAccessToken))
+router.get('/reset-token',asyncHandler(RefreshTokenAuth),asyncHandler(employeeController.generateAccessToken))
 
 
 export default router;
