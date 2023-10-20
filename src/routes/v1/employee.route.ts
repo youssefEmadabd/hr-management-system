@@ -14,7 +14,7 @@ router.route('/:id').patch(asyncHandler(auth), asyncHandler(employeeController.u
 
 router.post('/login', asyncHandler(employeeController.login));
 router.post('/register', asyncHandler(employeeController.register));
-router.get('/reset-token',asyncHandler(RefreshTokenAuth),asyncHandler(employeeController.generateAccessToken))
+router.post('/reset-token',asyncHandler(RefreshTokenAuth),asyncHandler(employeeController.generateAccessToken))
 
 
 export default router;
